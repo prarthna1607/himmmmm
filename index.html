@@ -12,7 +12,9 @@ padding:0;
 font-family: 'Arial';
 height:100vh;
 overflow:hidden;
-background: linear-gradient(135deg,#ff758c,#ff7eb3);
+/* gradient plus a teddy-bear image from Unsplash */
+background: linear-gradient(135deg,#ff758c,#ff7eb3),
+            url('https://source.unsplash.com/800x600/?teddy-bear') center/cover no-repeat;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -102,8 +104,13 @@ And yes… I love you more than you imagine.
 
 </div>
 
-<audio autoplay loop>
+<audio autoplay loop id="backgroundMusic">
 <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<!-- additional cute sound effect (low volume) -->
+<audio autoplay loop id="cuteEffect">
+  <source src="https://www.soundjay.com/button/sounds/button-16.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -132,7 +139,8 @@ for(let i=0;i<30;i++){
 
 let heart=document.createElement("div");
 heart.classList.add("heart");
-heart.innerHTML="❤️";
+// randomly choose heart or teddy emoji
+heart.innerHTML=Math.random() < 0.7 ? "❤️" : "🧸";
 
 heart.style.left=Math.random()*100+"vw";
 heart.style.animationDuration=(Math.random()*3+2)+"s";
@@ -149,6 +157,14 @@ heart.remove();
 }
 
 setInterval(createHearts,800);
+
+// lower volume for the cute effect
+const effect = document.getElementById('cuteEffect');
+if(effect){
+  effect.volume = 0.2;
+  // ensure it plays (some browsers block autoplay at higher volumes)
+  effect.play().catch(() => {});
+}
 
 </script>
 
