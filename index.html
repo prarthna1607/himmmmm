@@ -71,6 +71,12 @@ color:red;
 animation: fall linear infinite;
 }
 
+/* larger styling when the heart is actually a teddy emoji */
+.heart.teddy{
+  font-size:60px !important;
+  color:#8B4513; /* brown-ish */
+}
+
 @keyframes fall{
 0%{
 transform:translateY(-10vh);
@@ -108,8 +114,8 @@ And yes… I love you more than you imagine.
 <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
 
-<!-- additional cute sound effect (low volume) -->
-<audio autoplay loop id="cuteEffect">
+<!-- additional cute sound effect played on interaction -->
+<audio id="cuteEffect">
   <source src="https://www.soundjay.com/button/sounds/button-16.mp3" type="audio/mpeg">
 </audio>
 
@@ -129,8 +135,15 @@ setTimeout(typeWriter,40);
 typeWriter();
 
 function showLove(){
-document.getElementById("hiddenMessage").style.display="block";
-createHearts();
+  document.getElementById("hiddenMessage").style.display="block";
+  createHearts();
+  // play cute sound effect on user click (unblock autoplay)
+  const effect = document.getElementById('cuteEffect');
+  if(effect){
+    effect.currentTime = 0;
+    effect.volume = 0.5;
+    effect.play().catch(() => {});
+  }
 }
 
 function createHearts(){
@@ -140,7 +153,12 @@ for(let i=0;i<30;i++){
 let heart=document.createElement("div");
 heart.classList.add("heart");
 // randomly choose heart or teddy emoji
-heart.innerHTML=Math.random() < 0.7 ? "❤️" : "🧸";
+if(Math.random() < 0.7){
+  heart.innerHTML="❤️";
+} else {
+  heart.innerHTML="🧸";
+  heart.classList.add('teddy');
+}
 
 heart.style.left=Math.random()*100+"vw";
 heart.style.animationDuration=(Math.random()*3+2)+"s";
